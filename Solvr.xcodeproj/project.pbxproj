@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B85FDA798D5A75C126C09AC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EECA8B3DA18437A7BCC57B1 /* libPods.a */; };
 		836E25E419F4C35900ACDF38 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 836E25E319F4C35900ACDF38 /* main.m */; };
 		836E25E719F4C35A00ACDF38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 836E25E619F4C35A00ACDF38 /* AppDelegate.m */; };
-		836E25EA19F4C35A00ACDF38 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 836E25E919F4C35A00ACDF38 /* ViewController.m */; };
+		836E25EA19F4C35A00ACDF38 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 836E25E919F4C35A00ACDF38 /* ViewController.mm */; };
 		836E25ED19F4C35A00ACDF38 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 836E25EB19F4C35A00ACDF38 /* Main.storyboard */; };
 		836E25EF19F4C35A00ACDF38 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 836E25EE19F4C35A00ACDF38 /* Images.xcassets */; };
 		836E25F219F4C35A00ACDF38 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 836E25F019F4C35A00ACDF38 /* LaunchScreen.xib */; };
 		836E25FE19F4C35A00ACDF38 /* SolvrTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 836E25FD19F4C35A00ACDF38 /* SolvrTests.m */; };
+		836E260B19FDB0BB00ACDF38 /* ComputerVision.mm in Sources */ = {isa = PBXBuildFile; fileRef = 836E260A19FDB0BB00ACDF38 /* ComputerVision.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,19 +29,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		036EA28D4220AFE5C88D73BE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		3921D63D2FBFBDAFCBAE94A0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		5EECA8B3DA18437A7BCC57B1 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		836E25DE19F4C35900ACDF38 /* Solvr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Solvr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		836E25E219F4C35900ACDF38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		836E25E319F4C35900ACDF38 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		836E25E519F4C35900ACDF38 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		836E25E619F4C35A00ACDF38 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		836E25E819F4C35A00ACDF38 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		836E25E919F4C35A00ACDF38 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		836E25E919F4C35A00ACDF38 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		836E25EC19F4C35A00ACDF38 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		836E25EE19F4C35A00ACDF38 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		836E25F119F4C35A00ACDF38 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		836E25F719F4C35A00ACDF38 /* SolvrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SolvrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		836E25FC19F4C35A00ACDF38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		836E25FD19F4C35A00ACDF38 /* SolvrTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SolvrTests.m; sourceTree = "<group>"; };
+		836E260919FDB0BB00ACDF38 /* ComputerVision.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComputerVision.h; sourceTree = "<group>"; };
+		836E260A19FDB0BB00ACDF38 /* ComputerVision.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ComputerVision.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B85FDA798D5A75C126C09AC /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,12 +68,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		454A515409DEBE79A2BC439A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				036EA28D4220AFE5C88D73BE /* Pods.debug.xcconfig */,
+				3921D63D2FBFBDAFCBAE94A0 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		81B9AD62C21965586183280E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5EECA8B3DA18437A7BCC57B1 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		836E25D519F4C35900ACDF38 = {
 			isa = PBXGroup;
 			children = (
 				836E25E019F4C35900ACDF38 /* Solvr */,
 				836E25FA19F4C35A00ACDF38 /* SolvrTests */,
 				836E25DF19F4C35900ACDF38 /* Products */,
+				454A515409DEBE79A2BC439A /* Pods */,
+				81B9AD62C21965586183280E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,11 +111,13 @@
 				836E25E519F4C35900ACDF38 /* AppDelegate.h */,
 				836E25E619F4C35A00ACDF38 /* AppDelegate.m */,
 				836E25E819F4C35A00ACDF38 /* ViewController.h */,
-				836E25E919F4C35A00ACDF38 /* ViewController.m */,
+				836E25E919F4C35A00ACDF38 /* ViewController.mm */,
 				836E25EB19F4C35A00ACDF38 /* Main.storyboard */,
 				836E25EE19F4C35A00ACDF38 /* Images.xcassets */,
 				836E25F019F4C35A00ACDF38 /* LaunchScreen.xib */,
 				836E25E119F4C35900ACDF38 /* Supporting Files */,
+				836E260919FDB0BB00ACDF38 /* ComputerVision.h */,
+				836E260A19FDB0BB00ACDF38 /* ComputerVision.mm */,
 			);
 			path = Solvr;
 			sourceTree = "<group>";
@@ -126,9 +155,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 836E260119F4C35A00ACDF38 /* Build configuration list for PBXNativeTarget "Solvr" */;
 			buildPhases = (
+				67A63A66DAAC0A98B5F9AD23 /* Check Pods Manifest.lock */,
 				836E25DA19F4C35900ACDF38 /* Sources */,
 				836E25DB19F4C35900ACDF38 /* Frameworks */,
 				836E25DC19F4C35900ACDF38 /* Resources */,
+				D00A360C255B3BF491400EAC /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -214,13 +245,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		67A63A66DAAC0A98B5F9AD23 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D00A360C255B3BF491400EAC /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		836E25DA19F4C35900ACDF38 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				836E25EA19F4C35A00ACDF38 /* ViewController.m in Sources */,
+				836E25EA19F4C35A00ACDF38 /* ViewController.mm in Sources */,
 				836E25E719F4C35A00ACDF38 /* AppDelegate.m in Sources */,
+				836E260B19FDB0BB00ACDF38 /* ComputerVision.mm in Sources */,
 				836E25E419F4C35900ACDF38 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,6 +408,7 @@
 		};
 		836E260219F4C35A00ACDF38 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 036EA28D4220AFE5C88D73BE /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Solvr/Info.plist;
@@ -353,6 +419,7 @@
 		};
 		836E260319F4C35A00ACDF38 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3921D63D2FBFBDAFCBAE94A0 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Solvr/Info.plist;
@@ -414,6 +481,7 @@
 				836E260319F4C35A00ACDF38 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		836E260419F4C35A00ACDF38 /* Build configuration list for PBXNativeTarget "SolvrTests" */ = {
 			isa = XCConfigurationList;
@@ -422,6 +490,7 @@
 				836E260619F4C35A00ACDF38 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
