@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-    @property( retain, nonatomic ) IBOutlet UIImageView* backgroundImage;
+@interface ViewController : UIViewController <UIWebViewDelegate>
+
+@property( retain, nonatomic ) IBOutlet UIImageView* backgroundImage;
+@property( retain, nonatomic ) IBOutlet UIWebView* board;
+
 @end
 

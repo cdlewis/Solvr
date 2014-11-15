@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import <TesseractOCR/TesseractOCR.h>
+
 @interface ComputerVision : NSObject
 
-- (UIImage*)recogniseBoardFromImage:(UIImage*)image;
+- (NSString*) recogniseSudokuFromImage:(UIImage*)image withOCR:(Tesseract*)ocr;
 
 @end
