@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3B85FDA798D5A75C126C09AC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EECA8B3DA18437A7BCC57B1 /* libPods.a */; };
 		830566FD1A14143E004B822D /* NorvigSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 830566FB1A14143E004B822D /* NorvigSolver.cpp */; };
+		8310D6381A4D80EE00B58017 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8310D6371A4D80EE00B58017 /* AVFoundation.framework */; };
 		832F61E81A0D1ED7003D6FC7 /* board.html in Resources */ = {isa = PBXBuildFile; fileRef = 832F61E71A0D1ED7003D6FC7 /* board.html */; };
 		836E25E419F4C35900ACDF38 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 836E25E319F4C35900ACDF38 /* main.m */; };
 		836E25E719F4C35A00ACDF38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 836E25E619F4C35A00ACDF38 /* AppDelegate.m */; };
@@ -37,6 +38,7 @@
 		5EECA8B3DA18437A7BCC57B1 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		830566FB1A14143E004B822D /* NorvigSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NorvigSolver.cpp; sourceTree = "<group>"; };
 		830566FC1A14143E004B822D /* NorvigSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NorvigSolver.h; sourceTree = "<group>"; };
+		8310D6371A4D80EE00B58017 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		832F61E71A0D1ED7003D6FC7 /* board.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = board.html; sourceTree = "<group>"; };
 		836E25DE19F4C35900ACDF38 /* Solvr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Solvr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		836E25E219F4C35900ACDF38 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8310D6381A4D80EE00B58017 /* AVFoundation.framework in Frameworks */,
 				3B85FDA798D5A75C126C09AC /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +90,7 @@
 		81B9AD62C21965586183280E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8310D6371A4D80EE00B58017 /* AVFoundation.framework */,
 				5EECA8B3DA18437A7BCC57B1 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -425,7 +429,6 @@
 			baseConfigurationReference = 036EA28D4220AFE5C88D73BE /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
 				INFOPLIST_FILE = Solvr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -440,7 +443,6 @@
 			baseConfigurationReference = 3921D63D2FBFBDAFCBAE94A0 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = NO;
 				INFOPLIST_FILE = Solvr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
