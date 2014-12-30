@@ -1,3 +1,11 @@
+//
+//  NorvigSolver.cpp
+//  Solvr
+//
+//  Created by Chris Lewis on 12/11/14.
+//  Modified version of: https://github.com/pauek/norvig-sudoku
+//
+
 #import <iostream>
 #import <vector>
 #import <algorithm>
@@ -133,16 +141,21 @@ Sudoku::Sudoku(string s)
     for (int i = 0; i < s.size(); i++) {
         if (s[i] >= '1' && s[i] <= '9') {
             if (!assign(k, s[i] - '0')) {
-                cerr << "error: " << ( s[ i ] - '0' ) << endl;
+                valid = false;
                 return;
             }
             k++;
         } else if (s[i] == '0' || s[i] == ' ') {
             k++;
         } else {
-            cout << "wtf: " << s[ i ] << endl;
+            // this state can only be reached if an invalid character
+            // is found in the puzzle, which should be impossible given
+            // the input validation measures.
+            valid = false;
+            return;
         }
     }
+    valid = true;
 }
 
 unique_ptr<Sudoku> solve(unique_ptr<Sudoku> S) {
@@ -170,15 +183,4 @@ string Sudoku::flatten() const {
         output << i.str( 1 );
     }
     return output.str();
-}
-
-void solve_puzzle( std::string line ) {
-    Sudoku::init();
-    auto sc = new Sudoku( line );
-    if (auto S = solve(unique_ptr<Sudoku>(new Sudoku(line)))) {
-        cout << S->flatten();
-        S->write(cout);
-    } else {
-        cout << "No solution";
-    }
 }

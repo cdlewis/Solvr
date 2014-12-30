@@ -58,7 +58,11 @@ const int NUM_ROWS = 9;
                 [ ocr recognize ];
                 int gridx = ( r.x + r.width / 2 ) / ( SUDOKU_RESIZE / NUM_ROWS );
                 int gridy = ( r.y + r.height / 2 ) / ( SUDOKU_RESIZE / NUM_ROWS );
-                output[ gridx + gridy * 9 ] = [ [ ocr recognizedText ] characterAtIndex:0 ];
+                
+                // avoid awkward situations where the empty string is 'recognized'
+                if( [ [ ocr recognizedText ] length ] != 0 ) {
+                    output[ gridx + gridy * 9 ] = [ [ ocr recognizedText ] characterAtIndex:0 ];
+                }
             }
         }
     }

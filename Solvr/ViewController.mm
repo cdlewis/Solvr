@@ -10,11 +10,10 @@
 #import <TesseractOCR/TesseractOCR.h>
 #import "ViewController.h"
 #import "ComputerVision.h"
-
+#import <iostream>
+#import <sstream>
+#import <string>
 #import "NorvigSolver.h"
-#include <string>
-#include <sstream>
-#include <iostream>
 
 @implementation ViewController
 
@@ -43,6 +42,13 @@ Tesseract* tesseract = NULL;
     stateCache = @"";
     NSURL *url = [ [ NSBundle mainBundle ] URLForResource:@"board" withExtension:@"html" ];
     [ self.board loadRequest:[ NSURLRequest requestWithURL:url ] ];
+    
+    // Omnibutton
+    self.omnibutton.layer.borderWidth = 4.0f;
+    self.omnibutton.layer.borderColor = [ [ UIColor blackColor ] CGColor ];
+    self.omnibutton.layer.cornerRadius = 8;
+    [ self.omnibutton setTitle:@"Solving..." forState:UIControlStateDisabled ];
+
     
     // initialise avcapture
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
@@ -102,14 +108,17 @@ Tesseract* tesseract = NULL;
 }
 
 - (IBAction) captureNow:(id)sender {
-    // disable button to avoid mashing
-    UIButton *button = nil;
-    if ([sender isKindOfClass:[UIButton class]]) {
-        button = sender;
-        button.enabled = NO;
-        [ button setTitle:@"Solving..." forState:UIControlStateDisabled ];
+    // when board is visible, override default functionality and clear
+    if( self.board.hidden == NO ) {
+        [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
+        self.board.hidden = YES;
+        return;
     }
     
+    // disable button to avoid mashing
+    self.omnibutton.enabled = NO;
+    
+    // capture frame from camera
     AVCaptureConnection *videoConnection = [ self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
     [videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
 
@@ -125,7 +134,7 @@ Tesseract* tesseract = NULL;
              image = [ self applyAspectFillImage:image InRect:self.captureVideoPreviewLayer.frame ];
 
              // Process image
-              
+
               NSString* flat_board = [ cv recogniseSudokuFromImage:image withOCR:tesseract ];
              
              // Basic check for validity of scanned board. Technically this
@@ -134,23 +143,33 @@ Tesseract* tesseract = NULL;
              // obviously there are other cases where this will occur. A
              // better solution could be to algorithmically check for
              // for multiple solutions, perhaps using the Norvig solver.
+             NSLog( @"%@", flat_board );
+         //    flat_board = @"4370680000003008070500050600400010008030506090006000300105000907050060000009 0 56";
              if( [ flat_board isEqualToString:@"000000000000000000000000000000000000000000000000000000000000000000000000000000000" ] ) {
                  NSLog( @"No solution: empty board" );
+                 [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
              } else {
                  // convert to c++ string and feed to solver
                  Sudoku::init();
                  auto sc = new Sudoku( std::string( [ flat_board UTF8String ] ) );
-                 if( auto S = solve( std::unique_ptr<Sudoku>( sc ) ) ) {
-                     [ self update:[ NSString stringWithUTF8String:S->flatten().c_str() ] ];
+                 
+                 // contradiction detected in puzzle
+                 if( sc->valid ) {
+                     if( auto S = solve( std::unique_ptr<Sudoku>( sc ) ) ) {
+                        [ self update:[ NSString stringWithUTF8String:S->flatten().c_str() ] ];
+                        [ self.omnibutton setTitle:@"Clear" forState:UIControlStateNormal ];
+                    } else {
+                        NSLog( @"No solution: invalid board" );
+                        [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
+                    }
                  } else {
-                     NSLog( @"no solution" );
+                     NSLog( @"No solution: contradiction" );
+                     [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
                  }
              }
              
-             // Re-enable button if disabled
-             if( button != nil ) {
-                 button.enabled = YES;
-             }
+             // e-enable button if disabled
+             self.omnibutton.enabled = YES;
          }
      }
      ];

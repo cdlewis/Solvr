@@ -3,7 +3,7 @@
 //  Solvr
 //
 //  Created by Chris Lewis on 12/11/14.
-//  Copyright (c) 2014 Chris Lewis. All rights reserved.
+//  Modified version of: https://github.com/pauek/norvig-sudoku
 //
 
 #include <string>
@@ -38,6 +38,7 @@ public:
     int      least_count() const;
     void     write( std::ostream& o ) const;
     std::string   flatten() const;
+    bool valid;
 };
 
 std::unique_ptr<Sudoku> solve(std::unique_ptr<Sudoku> S);
