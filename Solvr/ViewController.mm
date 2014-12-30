@@ -6,14 +6,15 @@
 //  Copyright (c) 2014 Chris Lewis. All rights reserved.
 //
 
-#import <AVFoundation/AVFoundation.h>
-#import <TesseractOCR/TesseractOCR.h>
 #import "ViewController.h"
-#import "ComputerVision.h"
-#import <iostream>
+
 #import <sstream>
 #import <string>
+#import <TesseractOCR/TesseractOCR.h>
+
+#import "ComputerVision.h"
 #import "NorvigSolver.h"
+#import "EricaSadanCookbook.h"
 
 @implementation ViewController
 
@@ -46,48 +47,44 @@ Tesseract* tesseract = NULL;
     // Omnibutton
     self.omnibutton.layer.borderWidth = 4.0f;
     self.omnibutton.layer.borderColor = [ [ UIColor blackColor ] CGColor ];
-    self.omnibutton.layer.cornerRadius = 8;
-    [ self.omnibutton setTitle:@"Solving..." forState:UIControlStateDisabled ];
+    self.omnibutton.layer.cornerRadius = 40;
+    [ self.omnibutton setTitle:@"Solving" forState:UIControlStateDisabled ];
 
+    // AVCapture
     
-    // initialise avcapture
-    AVCaptureSession *session = [[AVCaptureSession alloc] init];
+    AVCaptureSession *session = [ [ AVCaptureSession alloc ] init ];
     session.sessionPreset = AVCaptureSessionPresetMedium;
-    //session.sessionPreset = AVCaptureSessionPresetPhoto;
     
-    self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
-    
+    // User feedback
+    self.captureVideoPreviewLayer = [ [ AVCaptureVideoPreviewLayer alloc ] initWithSession:session ];
     self.captureVideoPreviewLayer.frame = self.view.frame;
     [ self.captureVideoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill ];
+    [ self.backgroundImage.layer addSublayer:self.captureVideoPreviewLayer ];
     
-    [self.backgroundImage.layer addSublayer:self.captureVideoPreviewLayer];
-    
-    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
+    // Find camera
+    AVCaptureDevice *device = [ AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo ];
     NSError *error = nil;
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
-    if (!input) {
-        // Handle the error appropriately.
-        NSLog(@"ERROR: trying to open camera: %@", error);
+    AVCaptureDeviceInput *input = [ AVCaptureDeviceInput deviceInputWithDevice:device error:&error ];
+    if( input ) {
+        [ session addInput:input ];
+        
+        self.stillImageOutput = [ [ AVCaptureStillImageOutput alloc ] init ];
+        NSDictionary *outputSettings = [ [ NSDictionary alloc ] initWithObjectsAndKeys: AVVideoCodecJPEG, AVVideoCodecKey, nil ];
+        [ self.stillImageOutput setOutputSettings:outputSettings ];
+        
+        [ session addOutput:self.stillImageOutput ];
+        [ session startRunning ];
+    } else {
+        NSLog( @"ERROR: trying to open camera: %@", error );
     }
-    [session addInput:input];
-    
-    self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-    NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys: AVVideoCodecJPEG, AVVideoCodecKey, nil];
-    [ self.stillImageOutput setOutputSettings:outputSettings];
-    
-    [session addOutput:self.stillImageOutput];
-    
-    [session startRunning];
-    // end initialise avcapture
 }
 
 - (void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+    [ super didReceiveMemoryWarning ];
     // Dispose of any resources that can be recreated.
 }
 
-// WebView Fun
+// Results Board Webview
 
 - (void) webViewDidFinishLoad:(UIWebView*)webView {
     boardLoaded = YES; // one would expect this to be covered by `webView.loading`
@@ -106,6 +103,8 @@ Tesseract* tesseract = NULL;
         NSLog( @"board loaded: %@", stateCache );
     }
 }
+
+// Omnibutton Press
 
 - (IBAction) captureNow:(id)sender {
     // when board is visible, override default functionality and clear
@@ -131,7 +130,8 @@ Tesseract* tesseract = NULL;
          } else {
              NSData *jpegData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
              UIImage *image = [UIImage imageWithData:jpegData];
-             image = [ self applyAspectFillImage:image InRect:self.captureVideoPreviewLayer.frame ];
+             image = applyAspectFillImage( image, self.captureVideoPreviewLayer.frame );
+             //image = [ self applyAspectFillImage:image InRect:self.captureVideoPreviewLayer.frame ];
 
              // Process image
 
@@ -173,49 +173,6 @@ Tesseract* tesseract = NULL;
          }
      }
      ];
-}
-
-CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
-{
-    CGFloat xOffset = CGRectGetMidX(mainRect)-CGRectGetMidX(rect);
-    CGFloat yOffset = CGRectGetMidY(mainRect)-CGRectGetMidY(rect);
-    return CGRectOffset(rect, xOffset, yOffset);
-}
-
-CGFloat CGAspectScaleFill(CGSize sourceSize, CGRect destRect)
-{
-    CGSize destSize = destRect.size;
-    CGFloat scaleW = destSize.width / sourceSize.width;
-    CGFloat scaleH = destSize.height / sourceSize.height;
-    return MAX(scaleW, scaleH);
-}
-
-
-CGRect CGRectAspectFillRect(CGSize sourceSize, CGRect destRect)
-{
-    CGSize destSize = destRect.size;
-    CGFloat destScale = CGAspectScaleFill(sourceSize, destRect);
-    CGFloat newWidth = sourceSize.width * destScale;
-    CGFloat newHeight = sourceSize.height * destScale;
-    CGFloat dWidth = ((destSize.width - newWidth) / 2.0f);
-    CGFloat dHeight = ((destSize.height - newHeight) / 2.0f);
-    CGRect rect = CGRectMake (dWidth, dHeight, newWidth, newHeight);
-    return rect;
-}
-
-- (UIImage *) applyAspectFillImage: (UIImage *) image InRect: (CGRect) bounds
-{
-    CGRect destRect;
-    
-    UIGraphicsBeginImageContext(bounds.size);
-    CGRect rect = CGRectAspectFillRect(image.size, bounds);
-    destRect = CGRectCenteredInRect(rect, bounds);
-    
-    [image drawInRect: destRect];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-    
 }
 
 @end

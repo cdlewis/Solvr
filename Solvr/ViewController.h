@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Chris Lewis. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
 
 @interface ViewController : UIViewController <UIWebViewDelegate>
