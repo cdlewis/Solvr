@@ -21,11 +21,14 @@
                 height: 0;
                 margin: 0;
                 font-family: 'Courier New';
-                font-weight: bold;
+                font-weight: bolder;
                 font-size: 5vh;
                 top: -2.5vh;
                 position: relative;
                 text-align: center;
+            }
+            td > p.old {
+                color: rgb( 200, 200, 200 );
             }
             table tr:nth-child(3n+3) td {
                 border-bottom: 4px solid black;
@@ -39,16 +42,18 @@
         <table id="board"></table>
         <script type='text/javascript'>
             var board = document.getElementById( 'board' );
-            function set_board( string ) {
+            function set_board( original, solution ) {
                 var output = '<tr>';
-                for( var i = 0; i < string.length; i++ ) {
+                for( var i = 0; i < solution.length; i++ ) {
                     if( i != 0 && i % 9 == 0 ) { // add a new row
-                        output += '</tr><tr>'
+                        output += '</tr><tr>';
                     }
-                    if( string[ i ] == '0' ) {
+                    if( solution[ i ] == '0' ) {
                         output += '<td><p></p></td>'
+                    } else if( solution[ i ] === original[ i ] ) {
+                        output += '<td><p class="old">' + solution[ i ] + '</p></td>';
                     } else {
-                        output += '<td><p>' + string[ i ] + '</p></td>'
+                        output += '<td><p>' + solution[ i ] + '</p></td>';
                     }
                 }
                 output += '</tr>';
