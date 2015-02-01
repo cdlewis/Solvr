@@ -11,15 +11,22 @@
 
 @interface ViewController : UIViewController <UIWebViewDelegate>
 
+// board
 @property (retain, nonatomic) IBOutlet UIWebView* board;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* boardSpacing;
 
-// avcapture variables
+// feedback label
+@property (retain, nonatomic) IBOutlet UILabel* feedback;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint* feedbackSpacing;
+
+// AVCapture
 @property AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
 @property (retain, nonatomic) IBOutlet UIImageView* backgroundImage;
-@property (nonatomic, retain) AVCaptureStillImageOutput *stillImageOutput; // used by capturer
+@property (nonatomic, retain) AVCaptureStillImageOutput *stillImageOutput;
 
-// Omnibutton
+// omnibutton
 - (IBAction) captureNow:(id)sender;
 @property (retain, nonatomic) IBOutlet UIButton* omnibutton;
+
 
 @end

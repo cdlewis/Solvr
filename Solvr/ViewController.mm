@@ -17,6 +17,7 @@
 
 BOOL usingSampleImage = NO;
 ComputerVision* cv = NULL;
+NSString* empty_board = @"000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
 // Track webview load status and inputs waiting to be sent
 BOOL boardLoaded = NO;
@@ -37,14 +38,7 @@ NSString* solutionForBoard = @"";
     NSURL *url = [ [ NSBundle mainBundle ] URLForResource:@"board" withExtension:@"html" ];
     [ self.board loadRequest:[ NSURLRequest requestWithURL:url ] ];
     
-    // Omnibutton
-    self.omnibutton.layer.borderWidth = 4.0f;
-    self.omnibutton.layer.borderColor = [ [ UIColor blackColor ] CGColor ];
-    self.omnibutton.layer.cornerRadius = 40;
-    [ self.omnibutton setTitle:@"Solving" forState:UIControlStateDisabled ];
-
     // AVCapture
-    
     AVCaptureSession *session = [ [ AVCaptureSession alloc ] init ];
     session.sessionPreset = AVCaptureSessionPresetMedium;
     
@@ -62,17 +56,13 @@ NSString* solutionForBoard = @"";
         [ session addOutput:self.stillImageOutput ];
         [ session startRunning ];
         
-        // User feedback (moved inside if statement)
         self.captureVideoPreviewLayer = [ [ AVCaptureVideoPreviewLayer alloc ] initWithSession:session ];
         self.captureVideoPreviewLayer.frame = self.view.frame;
         [ self.captureVideoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill ];
         [ self.backgroundImage.layer addSublayer:self.captureVideoPreviewLayer ];
     } else {
-        // For the moment load a sample image when the camera
-        // cannot be used. Ideally there would instead be a
-        // message explaining the problem and giving the user
-        // an opportunity to load a sample image.
         NSLog( @"ERROR: trying to open camera: %@", error );
+        [ self showFeedback:@"Camera not found, using sample image instead." withDuration:0 ];
         self.backgroundImage.image = [ UIImage imageNamed:@"SampleImage" ];
         usingSampleImage = YES;
     }
@@ -93,13 +83,24 @@ NSString* solutionForBoard = @"";
 }
 
 - (void) update:(NSString*)board withSolution:(NSString*)solution {
-    boardToShow = board;
-    solutionForBoard = solution;
-    if( boardLoaded ) {
-        NSString* js = [ [ NSString alloc ] initWithFormat:@"set_board('%@', '%@' );", boardToShow, solutionForBoard ];
-        [ self.board stringByEvaluatingJavaScriptFromString:js ];
-        self.board.hidden = NO;
-        NSLog( @"board loaded: %@", solutionForBoard );
+    // passing the empty board to update will hide the current board if it's visible
+    if( [board isEqualToString:empty_board] && !self.board.hidden ) {
+        self.board.hidden = YES;
+        [UIView animateWithDuration:0.3 animations:^(void) {
+            self.board.alpha = 0;
+        }];
+    } else {
+        boardToShow = board;
+        solutionForBoard = solution;
+        if( boardLoaded ) {
+            NSString* js = [ [ NSString alloc ] initWithFormat:@"set_board('%@', '%@' );", boardToShow, solutionForBoard ];
+            [ self.board stringByEvaluatingJavaScriptFromString:js ];
+            self.board.hidden = NO;
+            self.board.alpha = 0;
+            [UIView animateWithDuration:0.3 animations:^(void) {
+                self.board.alpha = 1;
+            }];
+        }
     }
 }
 
@@ -108,16 +109,15 @@ NSString* solutionForBoard = @"";
 - (IBAction) captureNow:(id)sender {
     // when board is visible, override default functionality and clear
     if( self.board.hidden == NO ) {
-        [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
-        self.board.hidden = YES;
+        [ self.omnibutton setTitle:@"Press to Solve" forState:UIControlStateNormal ];
+        [self update:empty_board withSolution:empty_board];
         return;
     }
-    
+
     // disable button to avoid mashing
     self.omnibutton.enabled = NO;
 
     if( usingSampleImage ) {
-        NSLog( @"processing image" );
         [ self processImage:self.backgroundImage.image ];
     } else { // capture frame from camera
         AVCaptureConnection *videoConnection = [ self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
@@ -156,10 +156,8 @@ NSString* solutionForBoard = @"";
     // obviously there are other cases where this will occur. A
     // better solution could be to algorithmically check for
     // for multiple solutions, perhaps using the Norvig solver.
-    NSLog( @"%@", flat_board );
-    if( [ flat_board isEqualToString:@"000000000000000000000000000000000000000000000000000000000000000000000000000000000" ] ) {
-        NSLog( @"No solution: empty board" );
-        [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
+    if( [ flat_board isEqualToString:empty_board ] ) {
+        [ self showFeedback:@"Sorry! I couldn't find the board :(" withDuration:5.0 ];
     } else {
         // convert to c++ string and feed to solver
         Sudoku::init();
@@ -170,17 +168,56 @@ NSString* solutionForBoard = @"";
             if( auto S = solve( std::unique_ptr<Sudoku>( sc ) ) ) {
                 [ self update:flat_board withSolution:[ NSString stringWithUTF8String:S->flatten().c_str() ] ];
                 [ self.omnibutton setTitle:@"Clear" forState:UIControlStateNormal ];
+
             } else {
-                NSLog( @"No solution: invalid board" );
-                [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
+                [ self showFeedback:@"Sorry! I couldn't find the board :(" withDuration:5.0 ];
             }
         } else {
-            NSLog( @"No solution: contradiction" );
-            [ self.omnibutton setTitle:@"Solve" forState:UIControlStateNormal ];
+            [ self showFeedback:@"Unable to solve. The puzzle contained a contradiction :(" withDuration:5.0 ];
+            [ self update:empty_board withSolution:flat_board ];
+            [ self.omnibutton setTitle:@"Clear" forState:UIControlStateNormal ];
         }
     }
 
     self.omnibutton.enabled = YES; // e-enable button if disabled
+}
+
+// Handle user feedback label
+- (void) showFeedback:(NSString*)message withDuration:(float)duration {
+    self.feedback.text = message;
+    if( self.feedback.hidden ) {
+        // unhide but maintain 0 alpha for fade-in effect
+        self.feedback.hidden = NO;
+        self.feedback.alpha = 0;
+
+        // modify autolayout to accomodate the translation
+        int distance = self.feedback.layer.frame.size.height;
+        self.feedbackSpacing.constant = distance;
+        [self.feedback layoutIfNeeded];
+        
+        [UIView animateWithDuration:0.6
+                         animations:^(void){
+                             self.feedback.transform = CGAffineTransformMakeTranslation(0, distance);
+                             self.feedback.alpha = 1;
+                         }
+                         completion:^(BOOL finished) {
+                             // fade-out if non-zero duration specified
+                             if( duration ) {
+                                 [UIView animateWithDuration:0.6
+                                                       delay:2.0
+                                                     options:UIViewAnimationOptionCurveEaseInOut
+                                                  animations:^(void) {
+                                                      self.feedback.transform = CGAffineTransformMakeTranslation(0, 0);
+                                                      self.feedback.alpha = 0;
+                                                  }
+                                                  completion:^(BOOL finished) {
+                                                      self.feedback.hidden = YES;
+                                                  }
+                                  ];
+                             }
+                         }
+         ];
+    }
 }
 
 @end

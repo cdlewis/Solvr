@@ -1,3 +1,4 @@
 PODS_TESSERACTOCRIOS_CLANG_CXX_LIBRARY = compiler-default
 PODS_TESSERACTOCRIOS_FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/TesseractOCRiOS/Products"
-PODS_TESSERACTOCRIOS_OTHER_LDFLAGS = -weak_library /usr/lib/libstdc++.6.0.9.dylib -l"stdc++" -framework "Foundation" -framework "TesseractOCR" -framework "UIKit"
+PODS_TESSERACTOCRIOS_LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/TesseractOCRiOS/TesseractOCR/lib" "$(PODS_ROOT)/TesseractOCRiOS/TesseractOCR/lib"
+PODS_TESSERACTOCRIOS_OTHER_LDFLAGS = -weak_library /usr/lib/libstdc++.6.0.9.dylib -l"lept" -l"stdc++" -l"tesseract_all" -framework "Foundation" -framework "TesseractOCR" -framework "UIKit"
