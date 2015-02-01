@@ -92,7 +92,12 @@ NSString* solutionForBoard = @"";
     } else {
         boardToShow = board;
         solutionForBoard = solution;
-        if( boardLoaded ) {
+        if( boardLoaded ) {            
+            // heights of button/feedback label are variable
+            self.boardSpacing.constant = ( self.view.frame.size.height - self.feedback.frame.origin.y ) / 2;
+            NSLog( @"%f", self.view.frame.size.height - self.feedback.frame.origin.y );
+            [self.board setNeedsLayout];
+            
             NSString* js = [ [ NSString alloc ] initWithFormat:@"set_board('%@', '%@' );", boardToShow, solutionForBoard ];
             [ self.board stringByEvaluatingJavaScriptFromString:js ];
             self.board.hidden = NO;
