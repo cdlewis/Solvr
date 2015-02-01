@@ -7,6 +7,7 @@
 
 #import "ComputerVision.h"
 #import <vector>
+#import <exception>
 #import <opencv2/opencv.hpp>
 
 @implementation ComputerVision
@@ -21,8 +22,13 @@ const int NUM_ROWS = 9;
     
     auto src = [ self cvMatFromUIImage:image ];
     
-    auto quad = getBiggestSqaure( src );
-  
+    cv::Mat quad;
+    try {
+        quad = getBiggestSqaure( src );
+    } catch( FourCornersException& e ) {
+        return [ [ NSString alloc ] initWithUTF8String:output ];
+    }
+        
     // Setup OCR
     
     auto cv_image = quad.clone();
@@ -137,12 +143,12 @@ std::vector<cv::Point2f> convertToPoint2f( std::vector<cv::Point>& input ) {
 }
 
 // Calculate center of rectangle and order points clockwise
-void polarSort( std::vector<cv::Point>& corners )
+bool polarSort( std::vector<cv::Point>& corners )
 {
     auto size = corners.size();
     if( size != 4 ) {
         NSLog( @"Shape invalid. Does not have four corners" );
-        return;
+        throw fourcornersexception;
     }
     
     // Find center
@@ -177,6 +183,8 @@ void polarSort( std::vector<cv::Point>& corners )
     corners[ 1 ] = tr;
     corners[ 2 ] = br;
     corners[ 3 ] = bl;
+    
+    return true;
 }
 
 // Conversion functions courtesy of: http://docs.opencv.org/doc/tutorials/ios/image_manipulation/image_manipulation.html
@@ -242,5 +250,9 @@ void polarSort( std::vector<cv::Point>& corners )
     
     return finalImage;
 }
+
+// Exception for when polar sort detects the incorrect number of corners
+class FourCornersException: public std::exception {
+} fourcornersexception;
 
 @end
