@@ -25,51 +25,51 @@ NSString* boardToShow = @"";
 NSString* solutionForBoard = @"";
 
 - (void) viewDidLoad {
-    [ super viewDidLoad ];
+    [super viewDidLoad];
     
     // Board Detection
-    cv = [ [ ComputerVision alloc ] init ];
+    cv = [[ComputerVision alloc] init];
     
     // Results Board
     NSLog( @"Load HTML Board" );
     self.board.hidden = YES;
     self.board.delegate = self;
     boardLoaded = NO;
-    NSURL *url = [ [ NSBundle mainBundle ] URLForResource:@"board" withExtension:@"html" ];
-    [ self.board loadRequest:[ NSURLRequest requestWithURL:url ] ];
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"board" withExtension:@"html"];
+    [self.board loadRequest:[NSURLRequest requestWithURL:url]];
     
     // AVCapture
-    AVCaptureSession *session = [ [ AVCaptureSession alloc ] init ];
+    AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPresetMedium;
     
     // Find camera
-    AVCaptureDevice *device = [ AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo ];
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     NSError *error = nil;
-    AVCaptureDeviceInput *input = [ AVCaptureDeviceInput deviceInputWithDevice:device error:&error ];
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
     if( input ) {
-        [ session addInput:input ];
+        [session addInput:input];
         
-        self.stillImageOutput = [ [ AVCaptureStillImageOutput alloc ] init ];
-        NSDictionary *outputSettings = [ [ NSDictionary alloc ] initWithObjectsAndKeys: AVVideoCodecJPEG, AVVideoCodecKey, nil ];
-        [ self.stillImageOutput setOutputSettings:outputSettings ];
+        self.stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+        NSDictionary *outputSettings = [[NSDictionary alloc] initWithObjectsAndKeys: AVVideoCodecJPEG, AVVideoCodecKey, nil];
+        [self.stillImageOutput setOutputSettings:outputSettings];
         
-        [ session addOutput:self.stillImageOutput ];
-        [ session startRunning ];
+        [session addOutput:self.stillImageOutput];
+        [session startRunning];
         
-        self.captureVideoPreviewLayer = [ [ AVCaptureVideoPreviewLayer alloc ] initWithSession:session ];
+        self.captureVideoPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
         self.captureVideoPreviewLayer.frame = self.view.frame;
-        [ self.captureVideoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill ];
-        [ self.backgroundImage.layer addSublayer:self.captureVideoPreviewLayer ];
+        [self.captureVideoPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
+        [self.backgroundImage.layer addSublayer:self.captureVideoPreviewLayer];
     } else {
         NSLog( @"ERROR: trying to open camera: %@", error );
-        [ self showFeedback:@"Camera not found, using sample image instead." withDuration:0 ];
-        self.backgroundImage.image = [ UIImage imageNamed:@"SampleImage" ];
+        [self showFeedback:@"Camera not found, using sample image instead." withDuration:0];
+        self.backgroundImage.image = [UIImage imageNamed:@"SampleImage"];
         usingSampleImage = YES;
     }
 }
 
 - (void) didReceiveMemoryWarning {
-    [ super didReceiveMemoryWarning ];
+    [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
@@ -77,8 +77,8 @@ NSString* solutionForBoard = @"";
 
 - (void) webViewDidFinishLoad:(UIWebView*)webView {
     boardLoaded = YES; // one would expect this to be covered by `webView.loading`
-    if( ![ boardToShow isEqualToString:@"" ] ) {
-        [ self update:boardToShow withSolution:solutionForBoard ];
+    if( ![boardToShow isEqualToString:@""] ) {
+        [self update:boardToShow withSolution:solutionForBoard];
     }
 }
 
@@ -92,14 +92,16 @@ NSString* solutionForBoard = @"";
     } else {
         boardToShow = board;
         solutionForBoard = solution;
-        if( boardLoaded ) {            
+        NSLog( @"%@ \n \n %@", boardToShow, solutionForBoard );
+
+        if( boardLoaded ) {
             // heights of button/feedback label are variable
             self.boardSpacing.constant = ( self.view.frame.size.height - self.feedback.frame.origin.y ) / 2;
             NSLog( @"%f", self.view.frame.size.height - self.feedback.frame.origin.y );
             [self.board setNeedsLayout];
             
-            NSString* js = [ [ NSString alloc ] initWithFormat:@"set_board('%@', '%@' );", boardToShow, solutionForBoard ];
-            [ self.board stringByEvaluatingJavaScriptFromString:js ];
+            NSString* js = [[NSString alloc] initWithFormat:@"set_board('%@', '%@' );", boardToShow, solutionForBoard];
+            [self.board stringByEvaluatingJavaScriptFromString:js];
             self.board.hidden = NO;
             self.board.alpha = 0;
             [UIView animateWithDuration:0.3 animations:^(void) {
@@ -114,7 +116,7 @@ NSString* solutionForBoard = @"";
 - (IBAction) captureNow:(id)sender {
     // when board is visible, override default functionality and clear
     if( self.board.hidden == NO ) {
-        [ self.omnibutton setTitle:@"Press to Solve" forState:UIControlStateNormal ];
+        [self.omnibutton setTitle:@"Press to Solve" forState:UIControlStateNormal];
         [self update:empty_board withSolution:empty_board];
         return;
     }
@@ -123,21 +125,21 @@ NSString* solutionForBoard = @"";
     self.omnibutton.enabled = NO;
 
     if( usingSampleImage ) {
-        [ self processImage:self.backgroundImage.image ];
+        [self processImage:self.backgroundImage.image];
     } else { // capture frame from camera
-        AVCaptureConnection *videoConnection = [ self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
-        [ videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait ];
+        AVCaptureConnection *videoConnection = [self.stillImageOutput connectionWithMediaType:AVMediaTypeVideo];
+        [videoConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
 
-        [ self.stillImageOutput
+        [self.stillImageOutput
          captureStillImageAsynchronouslyFromConnection:videoConnection
          completionHandler:^( CMSampleBufferRef imageDataSampleBuffer, NSError *error ) {
              if( error ) { // todo: better error
                  NSLog( @"error (lol this is super helpful isn't it.)" );
              } else {
-                 NSData *jpegData = [ AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer ];
-                 UIImage *image = [ UIImage imageWithData:jpegData ];
+                 NSData *jpegData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                 UIImage *image = [UIImage imageWithData:jpegData];
                  image = applyAspectFillImage( image, self.captureVideoPreviewLayer.frame );
-                 [ self processImage:image ];
+                 [self processImage:image];
              }
          }
          ];
@@ -149,38 +151,39 @@ NSString* solutionForBoard = @"";
     // global scope leads to bizzare misreads after second image. This does
     // harm performance due to wasted cycles re-initialising but the hit
     // doesn't appear to be noticable.
-    Tesseract* tesseract = [ [ Tesseract alloc ] initWithLanguage:@"eng" ];
-    [ tesseract setVariableValue:@"123456789" forKey:@"tessedit_char_whitelist" ]; // only numbers
-    [ tesseract setVariableValue:@"7" forKey:@"tessedit_pageseg_mode" ]; // one character per image
+    Tesseract* tesseract = [[Tesseract alloc] initWithLanguage:@"eng"];
+    [tesseract setVariableValue:@"123456789" forKey:@"tessedit_char_whitelist"]; // only numbers
+    [tesseract setVariableValue:@"7" forKey:@"tessedit_pageseg_mode"]; // one character per image
     
-    NSString* flat_board = [ cv recogniseSudokuFromImage:image withOCR:tesseract ];
+    NSString* flat_board = [cv recogniseSudokuFromImage:image withOCR:tesseract];
     
-    // Basic check for validity of scanned board. Technically this
-    // means the scanned board must have only one complete solution.
-    // An empty board (all zeroes) will have multiple solutions. But
-    // obviously there are other cases where this will occur. A
-    // better solution could be to algorithmically check for
-    // for multiple solutions, perhaps using the Norvig solver.
-    if( [ flat_board isEqualToString:empty_board ] ) {
-        [ self showFeedback:@"Sorry! I couldn't find the board :(" withDuration:5.0 ];
+    // McGuire, Tugemann, Gilles and Civario proved that a board featuring 16 or fewer clues lacks a unique solution (http://arxiv.org/abs/1201.0749)
+    NSRegularExpression* validPuzzle = [NSRegularExpression regularExpressionWithPattern:@"[1-9]" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray* matches = [validPuzzle matchesInString:flat_board options:0 range:NSMakeRange(0, [flat_board length])];
+
+    if( [flat_board isEqualToString:empty_board] ) {
+        [self showFeedback:@"Sorry! I couldn't find the board :(" withDuration:5.0];
+    } else if( [matches count] <= 16 ) {
+        NSLog( @"Clues detected: %d", [matches count]);
+        [self showFeedback:@"Sorry! The puzzle did not have a unique solution :(" withDuration:5.0];
     } else {
         // convert to c++ string and feed to solver
         Sudoku::init();
-        auto sc = new Sudoku( std::string( [ flat_board UTF8String ] ) );
+        auto sc = new Sudoku( std::string( [flat_board UTF8String] ) );
         
         // contradiction detected in puzzle
         if( sc->valid ) {
             if( auto S = solve( std::unique_ptr<Sudoku>( sc ) ) ) {
-                [ self update:flat_board withSolution:[ NSString stringWithUTF8String:S->flatten().c_str() ] ];
-                [ self.omnibutton setTitle:@"Clear" forState:UIControlStateNormal ];
+                [self update:flat_board withSolution:[NSString stringWithUTF8String:S->flatten().c_str()]];
+                [self.omnibutton setTitle:@"Clear" forState:UIControlStateNormal];
 
             } else {
-                [ self showFeedback:@"Sorry! I couldn't find the board :(" withDuration:5.0 ];
+                [self showFeedback:@"Sorry! I couldn't find the board :(" withDuration:5.0];
             }
         } else {
-            [ self showFeedback:@"Unable to solve. The puzzle contained a contradiction :(" withDuration:5.0 ];
-            [ self update:empty_board withSolution:flat_board ];
-            [ self.omnibutton setTitle:@"Clear" forState:UIControlStateNormal ];
+            [self showFeedback:@"Unable to solve. The puzzle contained a contradiction :(" withDuration:5.0];
+            [self update:empty_board withSolution:flat_board];
+            [self.omnibutton setTitle:@"Clear" forState:UIControlStateNormal];
         }
     }
 
