@@ -239,6 +239,7 @@ NSString* solutionForBoard = @"";
             }];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^   (UIAlertAction *action) {
                 usingSampleImage = NO;
+                self.captureVideoPreviewLayer.hidden = NO;
                 self.backgroundImage.image = nil;
             }];
             [alert addAction:cancelAction];
@@ -249,8 +250,9 @@ NSString* solutionForBoard = @"";
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
                 NSLog( @"Cancel" );
             }];
-            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^   (UIAlertAction *action) {
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 usingSampleImage = YES;
+                self.captureVideoPreviewLayer.hidden = YES;
                 self.backgroundImage.image = [UIImage imageNamed:@"SampleImage"];
             }];
             [alert addAction:cancelAction];
