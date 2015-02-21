@@ -26,6 +26,7 @@ NSString* solutionForBoard = @"";
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    [self becomeFirstResponder];
     
     // Board Detection
     cv = [[ComputerVision alloc] init];
@@ -225,6 +226,41 @@ NSString* solutionForBoard = @"";
                              }
                          }
          ];
+    }
+}
+
+// Shake to view example image
+- (void) motionEnded:(UIEventSubtype)motion withEvent:(UIEvent*)event {
+    if( event.subtype == UIEventSubtypeMotionShake ) {
+        if( usingSampleImage ) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Solvr" message:@"Do you want to hide the sample image?" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                NSLog( @"Cancel" );
+            }];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^   (UIAlertAction *action) {
+                usingSampleImage = NO;
+                self.backgroundImage.image = nil;
+            }];
+            [alert addAction:cancelAction];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Solvr" message:@"Do you want to load a sample image?" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+                NSLog( @"Cancel" );
+            }];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^   (UIAlertAction *action) {
+                usingSampleImage = YES;
+                self.backgroundImage.image = [UIImage imageNamed:@"SampleImage"];
+            }];
+            [alert addAction:cancelAction];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    
+    if ( [super respondsToSelector:@selector(motionEnded:withEvent:)] ) {
+        [super motionEnded:motion withEvent:event];
     }
 }
 
