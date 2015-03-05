@@ -165,7 +165,6 @@ NSString* solutionForBoard = @"";
     if( [flat_board isEqualToString:empty_board] ) {
         [self showFeedback:@"Sorry! I couldn't find the board :(" withDuration:5.0];
     } else if( [matches count] <= 16 ) {
-        NSLog( @"Clues detected: %d", [matches count]);
         [self showFeedback:@"Sorry! The puzzle did not have a unique solution :(" withDuration:5.0];
     } else {
         // convert to c++ string and feed to solver

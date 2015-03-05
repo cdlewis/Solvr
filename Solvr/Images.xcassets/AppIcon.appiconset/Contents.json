@@ -113,13 +113,6 @@
       "idiom" : "ipad",
       "filename" : "Icon-76@2x.png",
       "scale" : "2x"
-    },
-    {
-      "size" : "120x120",
-      "idiom" : "car",
-      "filename" : "Icon-60@2x.png",
-      "unassigned" : true,
-      "scale" : "1x"
     }
   ],
   "info" : {

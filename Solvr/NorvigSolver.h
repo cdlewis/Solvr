@@ -17,14 +17,14 @@ public:
         return _b[ i - 1 ];
     }
     int count() const {
-        return std::count( _b.begin(), _b.end(), true );
+        return (int) std::count( _b.begin(), _b.end(), true );
     }
     void eliminate( int i ) {
         _b[ i - 1 ] = false;
     }
     int val() const {
         auto it = find( _b.begin(), _b.end(), true );
-        return ( it != _b.end() ? 1 + ( it - _b.begin() ) : -1 );
+        return (int) ( it != _b.end() ? 1 + ( it - _b.begin() ) : -1 );
     }
     std::string str( int wth ) const;
 };
