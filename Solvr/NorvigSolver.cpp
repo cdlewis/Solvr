@@ -9,6 +9,7 @@
 #import <algorithm>
 #import <memory>
 #import <sstream>
+#import <iostream>
 
 #include "NorvigSolver.h"
 
@@ -87,7 +88,7 @@ void Sudoku::init() {
 bool Sudoku::assign( int k, int val ) {
     for( int i = 1; i <= 9; i++ ) {
         if( i != val ) {
-            if( !eliminate( k, i) ) {
+            if( !eliminate( k, i ) ) {
                 return false;
             }
         }
@@ -98,6 +99,7 @@ bool Sudoku::assign( int k, int val ) {
 // Eliminate d from values[s]; propagate when values or places <= 2.
 // Return values, except return False if a contradiction is detected.
 bool Sudoku::eliminate( int k, int val ) {
+   // std::cout << "eliminating " << val << " from " << k << std::endl;
     if( !_cells[ k ].is_on( val ) ) {
         return true;
     }
@@ -170,6 +172,7 @@ Sudoku::Sudoku( string s ) : _cells(81) {
 }
 
 unique_ptr<Sudoku> solve( unique_ptr<Sudoku> S ) {
+    std::cout << S->flatten() << std::endl;
     if( S == nullptr || S->is_solved() ) {
         return S;
     }
@@ -179,13 +182,14 @@ unique_ptr<Sudoku> solve( unique_ptr<Sudoku> S ) {
         if( p.is_on( i ) ) {
             unique_ptr<Sudoku> S1( new Sudoku( *S ) );
             if( S1->assign( k, i ) ) {
-                if( auto S2 = solve( move( S1 ) ) ) {
+                std::cout << "Assigning " << i << " to " << k << std::endl;
+                if( auto S2 = solve( std::move( S1 ) ) ) {
                     return S2;
                 }
             }
         }
     }
-    return S;
+    return {};
 }
 
 string Sudoku::flatten() const {

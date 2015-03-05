@@ -118,15 +118,15 @@
       "size" : "120x120",
       "idiom" : "car",
       "filename" : "Icon-60@2x.png",
+      "unassigned" : true,
       "scale" : "1x"
     }
   ],
   "info" : {
     "version" : 1,
-    "author" : "AppIconTemplate"
+    "author" : "xcode"
   },
-    "properties" : {
+  "properties" : {
     "pre-rendered" : true
   }
-
 }

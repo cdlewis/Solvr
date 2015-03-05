@@ -31,8 +31,7 @@ public:
 
 class Sudoku {
     std::vector<Possible> _cells;
-    
-    static std::vector< std::vector<int> > _group, _neighbors, _groups_of;
+    static std::vector<std::vector<int>> _group, _neighbors, _groups_of;
     bool eliminate( int k, int val );
 public:
     Sudoku( std::string s );

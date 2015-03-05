@@ -224,6 +224,7 @@
 				TargetAttributes = {
 					836E25DD19F4C35900ACDF38 = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = X96B6R2JHB;
 					};
 					836E25F619F4C35A00ACDF38 = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -439,6 +440,7 @@
 			baseConfigurationReference = 036EA28D4220AFE5C88D73BE /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				INFOPLIST_FILE = Solvr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -453,6 +455,7 @@
 			baseConfigurationReference = 3921D63D2FBFBDAFCBAE94A0 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				INFOPLIST_FILE = Solvr/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
