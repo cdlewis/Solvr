@@ -170,8 +170,7 @@ NSString* solutionForBoard = @"";
     } else {
         // convert to c++ string and feed to solver
         Sudoku::init();
-        //auto sc = new Sudoku( std::string( [flat_board UTF8String] ) );
-        auto sc = new Sudoku( "000006400071050300000000000000080900030740502000300607050010004103000008904060000" );
+        auto sc = new Sudoku( std::string( [flat_board UTF8String] ) );
         
         // contradiction detected in puzzle
         if( sc->valid ) {

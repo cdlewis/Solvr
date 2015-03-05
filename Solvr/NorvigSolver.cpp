@@ -9,7 +9,6 @@
 #import <algorithm>
 #import <memory>
 #import <sstream>
-#import <iostream>
 
 #include "NorvigSolver.h"
 
@@ -172,7 +171,6 @@ Sudoku::Sudoku( string s ) : _cells(81) {
 }
 
 unique_ptr<Sudoku> solve( unique_ptr<Sudoku> S ) {
-    std::cout << S->flatten() << std::endl;
     if( S == nullptr || S->is_solved() ) {
         return S;
     }
@@ -182,7 +180,6 @@ unique_ptr<Sudoku> solve( unique_ptr<Sudoku> S ) {
         if( p.is_on( i ) ) {
             unique_ptr<Sudoku> S1( new Sudoku( *S ) );
             if( S1->assign( k, i ) ) {
-                std::cout << "Assigning " << i << " to " << k << std::endl;
                 if( auto S2 = solve( std::move( S1 ) ) ) {
                     return S2;
                 }
